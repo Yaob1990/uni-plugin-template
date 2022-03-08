@@ -1,0 +1,9 @@
+<view class="demo-page">
+  <image class="logo" mode="scaleToFill" src="/plugin.png" />
+  <view class="title">调用插件的组件: </view>
+  <hello-component />
+  <view class="title">Plugin Page: </view>
+  <navigator url="plugin://myPlugin/hello-page" class="nav">navigator 组件去插件页面</navigator>
+  <view style="height:20rpx"></view>
+  <view class="nav" onTap="navigateToPlugin">my.navigate 去插件页面</view>
+</view>

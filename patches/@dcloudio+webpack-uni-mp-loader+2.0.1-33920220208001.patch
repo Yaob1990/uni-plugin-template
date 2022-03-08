@@ -1,0 +1,81 @@
+diff --git a/node_modules/@dcloudio/webpack-uni-mp-loader/lib/plugin/index-new.js b/node_modules/@dcloudio/webpack-uni-mp-loader/lib/plugin/index-new.js
+index 8937120..759614f 100644
+--- a/node_modules/@dcloudio/webpack-uni-mp-loader/lib/plugin/index-new.js
++++ b/node_modules/@dcloudio/webpack-uni-mp-loader/lib/plugin/index-new.js
+@@ -16,22 +16,22 @@ const generateComponent = require('./generate-component')
+ 
+ const emitFileCaches = {}
+ 
+-function emitFile (filePath, source, compilation) {
++function emitFile(filePath, source, compilation) {
+   const emitFileMD5 = md5(filePath + source)
+   if (emitFileCaches[filePath] !== emitFileMD5) {
+     emitFileCaches[filePath] = emitFileMD5
+     compilation.assets[filePath] = {
+-      size () {
++      size() {
+         return Buffer.byteLength(source, 'utf8')
+       },
+-      source () {
++      source() {
+         return source
+       }
+     }
+   }
+ }
+ 
+-function addSubPackagesRequire (compilation) {
++function addSubPackagesRequire(compilation) {
+   if (!process.env.UNI_OPT_SUBPACKAGES) {
+     return
+   }
+@@ -54,10 +54,10 @@ function addSubPackagesRequire (compilation) {
+           const source = `require('${relativePath}');` + compilation.assets[name].source()
+ 
+           compilation.assets[name] = {
+-            size () {
++            size() {
+               return Buffer.byteLength(source, 'utf8')
+             },
+-            source () {
++            source() {
+               return source
+             }
+           }
+@@ -67,7 +67,7 @@ function addSubPackagesRequire (compilation) {
+   })
+ }
+ 
+-function addMPPluginRequire (compilation) {
++function addMPPluginRequire(compilation) {
+   // 编译到小程序插件 特殊处理入口文件
+   const assetsKeys = Object.keys(compilation.assets)
+   const UNI_MP_PLUGIN_MAIN = process.env.UNI_MP_PLUGIN_MAIN
+@@ -84,14 +84,14 @@ function addMPPluginRequire (compilation) {
+ 
+       const source =
+         orignalSource.substring(0, newlineIndex) +
+-        `\nmodule.exports = ${globalEnv}.__webpack_require_UNI_MP_PLUGIN__('${uniModuleId}');\n` +
+-        orignalSource.substring(newlineIndex + 1)
++        orignalSource.substring(newlineIndex + 1) +
++        `\nmodule.exports = ${globalEnv}.__webpack_require_UNI_MP_PLUGIN__('${uniModuleId}');\n`;
+ 
+       compilation.assets[name] = {
+-        size () {
++        size() {
+           return Buffer.byteLength(source, 'utf8')
+         },
+-        source () {
++        source() {
+           return source
+         }
+       }
+@@ -100,7 +100,7 @@ function addMPPluginRequire (compilation) {
+ }
+ 
+ class WebpackUniMPPlugin {
+-  apply (compiler) {
++  apply(compiler) {
+     if (!process.env.UNI_USING_NATIVE && !process.env.UNI_USING_V3_NATIVE) {
+       compiler.hooks.emit.tapPromise('webpack-uni-mp-emit', compilation => {
+         return new Promise((resolve, reject) => {
